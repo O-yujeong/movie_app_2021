@@ -69,18 +69,20 @@ function App() {
 */
 //#endregion
 
-// class component
+// class component : state 사용가능
 
 class App extends React.Component {
   state = {
     count: 0
   }
 
+  // setState()를 쓰는 이유 : state를 direct mutate하게 될 경우 render()를 타지 않으므로
   add = () => {
-    console.log("add")
+    //this.state.count = 1
+    this.setState({ count: this.state.count + 1 })  // --> 이렇게 this.state를 쓰는것은 안좋다
   };
   minus = () => {
-    console.log("minus")
+    this.setState(current => ({ count: current.count - 1 }))
   };
 
   render() {
