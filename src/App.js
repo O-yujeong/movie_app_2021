@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 
 //#region function component
@@ -78,14 +77,30 @@ class App extends React.Component {
 
   // setState()를 쓰는 이유 : state를 direct mutate하게 될 경우 render()를 타지 않으므로
   add = () => {
-    //this.state.count = 1
-    this.setState({ count: this.state.count + 1 })  // --> 이렇게 this.state를 쓰는것은 안좋다
+    //this.state.count = 1 (direct mutation)
+    this.setState({ count: this.state.count + 1 })              // --> 이렇게 this.state를 쓰는것은 안좋다
   };
   minus = () => {
-    this.setState(current => ({ count: current.count - 1 }))
+    this.setState(current => ({ count: current.count - 1 }))    // --> current 사용해줘야 더 좋음
   };
 
+  // component lifecycle
+  // 1. mounting  (constructor -> render -> componentDidMount)
+  constructor(props) {
+    super(props);
+    console.log("hello")
+  }
+  componentDidMount() {
+    console.log("Component rendered")
+  }
+  // 2. updating  (render -> componentDidUpdate)
+  componentDidUpdate() {
+    console.log("I just updated")
+  }
+  // 3. unmounting
+
   render() {
+    console.log("I'm rendering")
     return (
       <div>
         <h1>The number is {this.state.count}</h1>
