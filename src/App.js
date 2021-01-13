@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import { throwStatement } from "@babel/types";
 
 
 //#region function component
@@ -68,8 +70,10 @@ function App() {
 */
 //#endregion
 
-// class component : state 사용가능
+//#region class component
 
+// class component : state 사용가능
+/*
 class App extends React.Component {
   state = {
     count: 0
@@ -97,7 +101,10 @@ class App extends React.Component {
   componentDidUpdate() {
     console.log("I just updated")
   }
-  // 3. unmounting
+  // 3. unmounting  --> 어떻게 해야 작동하는지 모르지만,, component가 사라질 때 작동함
+  componentWillUnmount(){
+    console.log("Goodbye cruel world")
+  }
 
   render() {
     console.log("I'm rendering")
@@ -108,6 +115,34 @@ class App extends React.Component {
         <button onClick={this.minus}>Minus</button>
       </div>
     )
+  }
+}
+*/
+//#endregion
+
+class App extends React.Component {
+  state = {
+    isLoading: true,
+    movies: []
+  }
+
+  // 비동기 : async, await 사용
+  getMovies = async () => {
+    const movies = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json");
+  }
+
+  componentDidMount() {
+    // setTimeout(() => {
+    //   this.setState({ isLoading: false })
+    // }, 3000)
+    this.getMovies();
+  }
+
+  render() {
+    const { isLoading } = this.state;
+    return (
+      <div>{isLoading ? "Loading..." : "We are ready!"}</div>
+    );
   }
 }
 
