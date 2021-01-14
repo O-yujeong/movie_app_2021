@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { throwStatement } from "@babel/types";
+import Movie from "./Movie";
 
 
 //#region function component
@@ -128,7 +128,10 @@ class App extends React.Component {
 
   // 비동기 : async, await 사용
   getMovies = async () => {
-    const movies = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json");
+    const { data: { data: { movies } } } = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json?sort_by=rating");
+    // data.data.movies
+
+    this.setState({ movies, isLoading: false })
   }
 
   componentDidMount() {
@@ -139,9 +142,12 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, movies } = this.state;
     return (
-      <div>{isLoading ? "Loading..." : "We are ready!"}</div>
+      <div>{isLoading
+        ? "Loading..."
+        : movies.map(movie => (<Movie key={movie.id} id={movie.id} year={movie.year} title={movie.title} summary={movie.summary} poster={movie.medium_cover_image} />)
+        )}</div>
     );
   }
 }
